@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<title>Đại Lợi Redesign</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Corporate-industrial: full-bleed photography, big stacked headlines, navy + signal red, white space. Responsive via container queries so the Mobile preview toggle shows the real phone layout. */
+:root{
+  color-scheme:light;
+  --navy:#0A1F33; --navy2:#12304D; --red:#E3262E; --red-d:#C11C23; --red-soft:#FDEEEE;
+  --ink:#0F1B2A; --muted:#5D6B7A; --line:#E3E8EE; --soft:#F4F6F9; --white:#fff; --ok:#11946B;
+  --f:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --pbh:58px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#DDE3EA;color:var(--ink);font-family:var(--f);font-size:15.5px;line-height:1.6}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid #2E7CF6;outline-offset:2px}
+h1,h2,h3,h4{margin:0;text-wrap:balance;line-height:1.15}
+p{margin:0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- presenter bar (not part of the website) ---------- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:90;background:#07111C}
+.pbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:80;background:#07111C;color:#AFC0D0}
+.pbar .in{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding-block:9px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1440px;margin:0 auto}
+.pbar b{color:#fff;font-size:14px}
+.pbar .grow{flex:1}
+.seg{display:flex;background:#132232;border-radius:9px;padding:3px;gap:2px;overflow-x:auto;max-width:100%}
+.seg button{border:0;background:none;color:#9FB1C3;padding:6px 12px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:#fff;color:#07111C}
+.stage{padding:18px max(16px,env(safe-area-inset-right,0px)) 48px max(16px,env(safe-area-inset-left,0px))}
+.frame{max-width:1440px;margin:0 auto;background:#fff;border-radius:14px;box-shadow:0 18px 60px rgba(7,17,28,.22);overflow:clip;transition:max-width .35s ease}
+.frame.phone{max-width:400px;border-radius:30px;border:10px solid #07111C}
+@media (max-width:640px){.stage{padding-inline:0;padding-top:0}.frame,.frame.phone{border-radius:0;border:0;box-shadow:none}.devseg{display:none}}
+
+/* ---------- website ---------- */
+.site{container:site/inline-size;background:#fff;position:relative}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,4cqi,40px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:999px;padding:14px 26px;font-weight:700;font-size:14.5px;cursor:pointer;transition:transform .2s,background .2s,box-shadow .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 10px 24px rgba(227,38,46,.28)}.btn-red:hover{background:var(--red-d)}
+.btn-line{box-shadow:inset 0 0 0 1.5px currentColor;background:transparent}
+.btn-navy{background:var(--navy);color:#fff}
+.ico{width:18px;height:18px;flex:none}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
+.eyebrow::before{content:"";width:26px;height:2px;background:currentColor}
+.h2{font-size:clamp(28px,4.2cqi,48px);font-weight:800;letter-spacing:-.025em;color:var(--navy);margin-top:12px}
+.lead{color:var(--muted);font-size:clamp(15px,1.4cqi,17px);max-width:60ch}
+.sec{padding-block:clamp(56px,8cqi,110px)}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:clamp(28px,4cqi,48px)}
+.more{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--navy);border-bottom:2px solid var(--red);padding-bottom:3px}
+.more:hover{color:var(--red)}
+
+/* header */
+.hdr{position:sticky;top:var(--pbh);z-index:40;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid rgba(10,31,51,.07)}
+.hdr .wrap{display:flex;align-items:center;gap:28px;height:76px}
+.logo{display:flex;align-items:center;gap:11px}
+.logo img{width:44px;height:auto}
+.logo b{display:block;font-size:20px;font-weight:800;letter-spacing:.02em;color:var(--navy);line-height:1}
+.logo small{display:block;font-size:10.5px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-top:4px;font-weight:600}
+.menu{display:flex;gap:4px;margin-left:auto}
+.menu a{padding:9px 14px;border-radius:999px;font-weight:600;font-size:14.5px;color:#26384A}
+.menu a:hover{background:var(--soft)}
+.menu a.on{color:var(--red)}
+.hdr .phone{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--navy)}
+.hdr .phone span{width:38px;height:38px;border-radius:50%;background:var(--red-soft);color:var(--red);display:grid;place-items:center}
+.burger{display:none;margin-left:auto;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;place-items:center}
+.drawer{display:none}
+
+/* hero */
+.hero{position:relative;color:#fff;isolation:isolate;overflow:hidden}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transform:scale(1.04);animation:kb 14s ease-out forwards}
+@keyframes kb{to{transform:scale(1)}}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(7,22,38,.92) 0%,rgba(7,22,38,.72) 42%,rgba(7,22,38,.15) 100%)}
+.hero .wrap{min-height:clamp(540px,52cqi,700px);display:flex;flex-direction:column;justify-content:center;padding-block:80px 140px}
+.hero .eyebrow{color:#FF7A80}
+.hero h1{font-size:clamp(38px,6.4cqi,82px);font-weight:800;letter-spacing:-.035em;line-height:1.02;margin:20px 0 22px;max-width:13ch}
+.hero h1 em{font-style:normal;color:#FF5A61}
+.hero p{color:#C8D5E2;font-size:clamp(15px,1.5cqi,18px);max-width:52ch}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+.hero .ctas .btn-line{color:#fff}
+.stats{position:relative;margin-top:-84px;z-index:2}
+.stats .box{background:#fff;border-radius:20px;box-shadow:0 24px 60px rgba(10,31,51,.14);display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.stats .box div{padding:28px 30px;border-left:1px solid var(--line)}
+.stats .box div:first-child{border:0}
+.stats b{display:block;font-size:clamp(30px,3.6cqi,44px);font-weight:800;letter-spacing:-.03em;color:var(--navy);line-height:1.05}
+.stats b sup{font-size:.5em;color:var(--red);margin-left:2px}
+.stats span{color:var(--muted);font-size:14px}
+
+/* about split */
+.split{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,5cqi,72px);align-items:center}
+.pic{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:5/4}
+.pic img{width:100%;height:100%;object-fit:cover}
+.pic .float{position:absolute;left:20px;bottom:20px;background:#fff;border-radius:14px;padding:14px 18px;display:flex;gap:12px;align-items:center;box-shadow:0 12px 30px rgba(0,0,0,.18);max-width:calc(100% - 40px)}
+.pic .float img{width:56px;height:auto}
+.pic .float b{display:block;font-size:14px}
+.pic .float span{font-size:12.5px;color:var(--muted)}
+.checks{list-style:none;padding:0;margin:26px 0 30px;display:grid;gap:12px}
+.checks li{display:flex;gap:12px;align-items:flex-start}
+.checks svg{color:var(--red);flex:none;margin-top:3px}
+
+/* solution cards */
+.sol{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.sc{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:3/4;color:#fff;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;padding:24px;background:var(--navy)}
+.sc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .6s}
+.sc.light img{object-fit:contain;padding:12% 10% 34%;background:linear-gradient(180deg,#F2F5F8,#E3E9EF)}
+.sc::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,31,51,0) 35%,rgba(10,31,51,.92) 100%)}
+.sc:hover img{transform:scale(1.06)}
+.sc small{font-family:var(--mono);font-size:12px;color:#FF8F94}
+.sc h3{font-size:21px;font-weight:700;margin:6px 0 8px;letter-spacing:-.01em}
+.sc p{font-size:14px;color:#C9D6E3}
+.sc .go{position:absolute;top:18px;right:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);display:grid;place-items:center;transition:.25s}
+.sc:hover .go{background:var(--red)}
+
+/* scroller */
+.scroller{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 3*18px)/4);gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin}
+.scroller>*{scroll-snap-align:start}
+.navbtns{display:flex;gap:8px}
+.navbtns button{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--line);background:#fff;cursor:pointer;display:grid;place-items:center}
+.navbtns button:hover{border-color:var(--navy)}
+.pc{border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px;background:#fff;transition:.25s}
+.pc:hover{border-color:transparent;box-shadow:0 18px 40px rgba(10,31,51,.12);transform:translateY(-4px)}
+.pc .ph{aspect-ratio:1;background:linear-gradient(180deg,#F5F7FA,#EBEFF4);border-radius:12px;display:grid;place-items:center;overflow:hidden;position:relative}
+.pc .ph img{width:86%;height:86%;object-fit:contain;mix-blend-mode:multiply}
+.pc .tag{position:absolute;left:10px;top:10px;font-size:11px;font-weight:700;background:#fff;border-radius:999px;padding:4px 10px;color:var(--navy)}
+.pc h3{font-size:16.5px;font-weight:700}
+.pc p{font-size:13.5px;color:var(--muted)}
+.pc .row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:6px}
+.pc .row span{font-size:13px;font-weight:700;color:var(--red)}
+.pc .row i{width:34px;height:34px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-style:normal}
+.chipcats{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.chipcats a{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:999px;padding:6px 16px 6px 6px;font-size:14px;font-weight:600;background:#fff}
+.chipcats a:hover{border-color:var(--red);color:var(--red)}
+.chipcats img{width:36px;height:36px;border-radius:50%;object-fit:contain;background:var(--soft);mix-blend-mode:multiply}
+
+/* services dark */
+.dark{background:var(--navy);color:#fff}
+.dark .h2{color:#fff}
+.dark .lead{color:#9DB2C7}
+.svc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.svc a{border-radius:18px;overflow:hidden;background:var(--navy2);display:flex;flex-direction:column}
+.svc .ph{aspect-ratio:4/3;overflow:hidden}
+.svc img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.svc a:hover img{transform:scale(1.05)}
+.svc .bd{padding:20px 20px 24px}
+.svc small{font-family:var(--mono);color:#FF8F94;font-size:12px}
+.svc h3{font-size:18px;margin:6px 0 6px}
+.svc p{color:#9DB2C7;font-size:14px}
+
+/* logos marquee */
+.marq{overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marq .track{display:flex;gap:16px;width:max-content;animation:mq 60s linear infinite}
+.marq:hover .track{animation-play-state:paused}
+@keyframes mq{to{transform:translateX(-50%)}}
+.lg{width:160px;height:92px;border:1px solid var(--line);border-radius:14px;display:grid;place-items:center;padding:12px;background:#fff;flex:none}
+.lg img{max-height:64px;width:auto;object-fit:contain}
+
+/* CTA */
+.cta{background:linear-gradient(120deg,var(--red) 0%,#B5141B 100%);color:#fff;border-radius:26px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4cqi,56px);padding:clamp(28px,5cqi,60px);position:relative;overflow:hidden}
+.cta::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;border:60px solid rgba(255,255,255,.07)}
+.cta h2{font-size:clamp(26px,3.6cqi,42px);font-weight:800;letter-spacing:-.025em}
+.cta p{color:#FFE1E2;margin-top:12px}
+.cta .hot{margin-top:26px;display:flex;flex-direction:column;gap:2px}
+.cta .hot small{color:#FFD0D2}
+.cta .hot b{font-size:clamp(24px,3cqi,32px);letter-spacing:.01em;user-select:all}
+.form{background:#fff;color:var(--ink);border-radius:18px;padding:24px;display:grid;gap:12px;position:relative;z-index:1}
+.form h3{font-size:19px}
+.field{display:grid;gap:6px;font-size:13px;font-weight:600;color:#33414E}
+.field input,.field select,.field textarea{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-weight:400;width:100%;background:#fff}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--navy)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* footer */
+.ft{background:#061423;color:#8EA3B8;font-size:14.5px;margin-top:clamp(56px,8cqi,110px)}
+.ft .wrap{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:36px;padding-block:64px 28px}
+.ft .logo b{color:#fff}
+.ft h4{color:#fff;font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+.ft ul{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.ft a:hover{color:#fff}
+.ft .legal{grid-column:1/-1;border-top:1px solid #15283C;padding-top:20px;font-size:12.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+/* mobile action bar */
+.mbar{display:none;position:sticky;bottom:0;z-index:45;background:#fff;border-top:1px solid var(--line);padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));grid-template-columns:1fr 1fr 1.4fr;gap:8px;box-shadow:0 -8px 24px rgba(10,31,51,.08)}
+.mbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;font-weight:700;border-radius:12px;padding:7px 4px;color:var(--navy)}
+.mbar a.q{background:var(--red);color:#fff;flex-direction:row;gap:8px;font-size:14px}
+.mbar .zl{color:#0068FF}
+
+/* ---------- product page ---------- */
+.crumbbar{background:var(--soft)}
+.crumb{display:flex;flex-wrap:wrap;gap:8px;font-size:13.5px;color:var(--muted);padding-block:16px}
+.crumb a:hover{color:var(--red)}
+.crumb i{font-style:normal;opacity:.45}
+.pd{display:grid;grid-template-columns:1.12fr 1fr;gap:clamp(28px,5cqi,64px);padding-block:36px 20px;align-items:start}
+.gal{position:sticky;top:calc(var(--pbh) + 96px)}
+.gal .main{border-radius:22px;background:radial-gradient(circle at 50% 55%,#fff 30%,#EDF1F5 100%);aspect-ratio:1.12;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;position:relative}
+.gal .main::-webkit-scrollbar{display:none}
+.gal .main img{flex:0 0 100%;width:100%;height:100%;object-fit:contain;padding:6%;scroll-snap-align:center;mix-blend-mode:multiply}
+.gal .badge{position:absolute;left:18px;top:18px;background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px;z-index:1}
+.gal .wrapm{position:relative}
+.gal .count{position:absolute;right:16px;bottom:16px;background:rgba(10,31,51,.75);color:#fff;font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:999px}
+.gal .thumbs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:12px}
+.gal .thumbs button{border:2px solid transparent;border-radius:14px;background:var(--soft);aspect-ratio:1;padding:6px;cursor:pointer}
+.gal .thumbs button[aria-pressed="true"]{border-color:var(--red);background:#fff}
+.gal .thumbs img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.info h1{font-size:clamp(30px,3.8cqi,46px);font-weight:800;letter-spacing:-.03em;color:var(--navy);margin:12px 0 10px}
+.info .sub{color:var(--muted)}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.pills span{font-size:12.5px;font-weight:600;background:var(--soft);border-radius:999px;padding:6px 12px}
+.pills .ok{background:#E7F6F0;color:var(--ok)}
+.lbl{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:28px 0 10px}
+.lbl b{color:var(--red);letter-spacing:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:9px 13px;font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;color:#33414E;transition:.15s}
+.chips button:hover{border-color:#9AAAB9}
+.chips button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.readout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.readout div{background:var(--soft);border-radius:16px;padding:16px 18px}
+.readout span{font-size:12.5px;color:var(--muted);display:block}
+.readout b{font-family:var(--mono);font-size:clamp(20px,2.4cqi,26px);color:var(--navy);font-weight:700}
+.readout b small{font-size:13px;color:var(--muted);margin-left:4px;font-weight:500}
+.buy{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.buy .btn{flex:1 1 220px;padding-block:16px}
+.assure{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}
+.assure div{border:1px solid var(--line);border-radius:14px;padding:12px;font-size:13px;display:flex;gap:10px;align-items:center;line-height:1.35}
+.assure svg{color:var(--ok);flex:none}
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;position:sticky;top:calc(var(--pbh) + 76px);background:#fff;z-index:5}
+.tabs a{padding:16px 18px;font-weight:700;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs a.on,.tabs a:hover{color:var(--navy);border-color:var(--red)}
+.block{padding-block:clamp(36px,5cqi,64px);scroll-margin-top:calc(var(--pbh) + 140px)}
+.block h2{font-size:clamp(24px,3cqi,34px);font-weight:800;letter-spacing:-.02em;color:var(--navy);margin-bottom:22px}
+.feat{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(24px,4cqi,56px);align-items:center}
+.feat .pic{aspect-ratio:16/11;background:linear-gradient(180deg,#F5F7FA,#E8EDF2)}
+.feat .pic img{object-fit:contain;padding:6%;mix-blend-mode:multiply}
+.fl{display:grid;gap:14px}
+.fl div{display:grid;grid-template-columns:48px 1fr;gap:16px;padding:18px;border-radius:16px;border:1px solid var(--line)}
+.fl svg{width:48px;height:48px;padding:11px;border-radius:12px;background:var(--red-soft);color:var(--red)}
+.fl h3{font-size:16.5px;margin-bottom:4px}
+.fl p{color:var(--muted);font-size:14px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:16px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+thead th{background:var(--soft);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+tbody tr:last-child td{border:0}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+tr.on td{background:var(--red-soft)}
+.mcards{display:none;gap:10px}
+.mcard{border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.mcard.on{border-color:var(--red);background:var(--red-soft)}
+.mcard b{font-family:var(--mono)}
+.mcard dl{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin:8px 0 0;font-size:13.5px}
+.mcard dt{color:var(--muted)}.mcard dd{margin:0;font-family:var(--mono);text-align:right}
+.doc{display:flex;gap:18px;align-items:center;border-radius:18px;background:var(--navy);color:#fff;padding:22px 24px;flex-wrap:wrap}
+.doc .g{flex:1;min-width:200px}
+.doc span{color:#9DB2C7;font-size:13.5px}
+details{border-bottom:1px solid var(--line);padding:18px 0}
+summary{font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:22px;line-height:1;color:var(--red)}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);margin-top:10px;max-width:70ch}
+
+/* ---------- profile page ---------- */
+.phero{position:relative;color:#fff;isolation:isolate;overflow:hidden}
+.phero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.phero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(7,22,38,.75),rgba(7,22,38,.92))}
+.phero .wrap{padding-block:clamp(64px,9cqi,120px) clamp(48px,6cqi,80px)}
+.phero h1{font-size:clamp(34px,5.6cqi,68px);font-weight:800;letter-spacing:-.035em;max-width:16ch;margin:16px 0 18px}
+.phero p{color:#C8D5E2;max-width:58ch}
+.phero .eyebrow{color:#FF7A80}
+.pstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:rgba(255,255,255,.14);border-radius:18px;overflow:hidden;margin-top:44px}
+.pstats div{background:rgba(7,22,38,.55);backdrop-filter:blur(6px);padding:22px 24px}
+.pstats b{display:block;font-size:clamp(26px,3cqi,38px);font-weight:800;letter-spacing:-.02em}
+.pstats span{color:#AFC1D2;font-size:13.5px}
+.filters{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.filters button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 18px;font-weight:600;font-size:14px;cursor:pointer;white-space:nowrap}
+.filters button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.projects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.pj{border-radius:20px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;background:#fff;transition:.25s}
+.pj:hover{box-shadow:0 18px 44px rgba(10,31,51,.12);transform:translateY(-4px)}
+.pj .ph{aspect-ratio:16/10;position:relative;overflow:hidden}
+.pj .ph img{width:100%;height:100%;object-fit:cover}
+.pj .cl{position:absolute;left:14px;bottom:-26px;width:88px;height:56px;border-radius:12px;background:#fff;box-shadow:0 8px 20px rgba(10,31,51,.15);display:grid;place-items:center;padding:6px}
+.pj .cl img{max-height:44px;width:auto;object-fit:contain}
+.pj .yr{position:absolute;right:14px;top:14px;background:rgba(10,31,51,.8);color:#fff;font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:999px}
+.pj .bd{padding:40px 20px 22px;display:grid;gap:10px}
+.pj .ind{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
+.pj h3{font-size:18px}
+.pj ul{list-style:none;padding:0;margin:0;display:grid;gap:7px;font-size:14px;color:#33414E}
+.pj li{display:flex;gap:10px}
+.pj li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red);margin-top:9px;flex:none}
+.pj .kpi{display:flex;gap:18px;border-top:1px dashed var(--line);padding-top:12px;margin-top:4px}
+.pj .kpi b{font-family:var(--mono);color:var(--navy);display:block;font-size:16px}
+.pj .kpi span{font-size:12px;color:var(--muted)}
+.sample{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#8A5A00;background:#FFF4DB;border-radius:999px;padding:5px 12px}
+.wall{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.wall .lg{width:auto;height:100px}
+.wall .lg img{filter:grayscale(1);opacity:.8;transition:.25s}
+.wall .lg:hover img{filter:none;opacity:1}
+.timeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;counter-reset:t}
+.timeline div{border-top:3px solid var(--navy);padding-top:16px}
+.timeline b{font-family:var(--mono);color:var(--red);font-size:14px}
+.timeline h3{font-size:17px;margin:6px 0}
+.timeline p{color:var(--muted);font-size:14px}
+
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#07111C;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;z-index:99;max-width:calc(100% - 32px)}
+
+/* ---------- container-query breakpoints ---------- */
+@container site (max-width:1100px){
+  .menu{display:none}.hdr .phone{display:none}
+  .burger{display:grid}
+  .drawer{position:absolute;left:0;right:0;top:76px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 20px 40px rgba(10,31,51,.12);padding:12px clamp(16px,4cqi,40px) 20px}
+  .drawer.open{display:grid;gap:2px}
+  .drawer a{padding:13px 4px;font-weight:600;font-size:16px;border-bottom:1px solid var(--soft)}
+  .drawer .btn{margin-top:12px}
+  .sol,.svc{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .scroller{grid-auto-columns:calc((100% - 2*18px)/3)}
+  .projects{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wall{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .ft .wrap{grid-template-columns:1fr 1fr}
+}
+@container site (max-width:800px){
+  .split,.cta,.pd,.feat{grid-template-columns:1fr}
+  .stats .box,.pstats,.timeline{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stats .box div:nth-child(3){border-left:0}
+  .stats .box div:nth-child(n+3){border-top:1px solid var(--line)}
+  .gal{position:static}
+  .scroller{grid-auto-columns:calc((100% - 18px)/2.2)}
+  .assure{grid-template-columns:1fr}
+  .hero::before{background:linear-gradient(180deg,rgba(7,22,38,.55) 0%,rgba(7,22,38,.9) 70%)}
+}
+@container site (max-width:600px){
+  .hdr .wrap{height:64px;gap:12px}
+  .drawer{top:64px}
+  .logo img{width:36px}.logo b{font-size:17px}.logo small{font-size:9.5px}
+  .tabs{top:calc(var(--pbh) + 64px)}
+  .hero .wrap{min-height:0;padding-block:56px 120px}
+  .hero .ctas .btn{flex:1 1 100%}
+  .stats .box div{padding:18px}
+  .sol{grid-template-columns:1fr 1fr;gap:12px}
+  .sc{aspect-ratio:3/4.4;padding:16px;border-radius:16px}
+  .sc h3{font-size:16px}.sc p{display:none}.sc .go{width:34px;height:34px;top:12px;right:12px}
+  .svc{grid-template-columns:1fr}
+  .svc a{flex-direction:row}.svc .ph{aspect-ratio:1;width:38%;flex:none}.svc .bd{padding:14px}
+  .scroller{grid-auto-columns:72%;gap:12px}
+  .navbtns{display:none}
+  .row2{grid-template-columns:1fr}
+  .projects{grid-template-columns:1fr}
+  .wall{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .wall .lg{height:72px;padding:8px}
+  .lg{width:120px;height:72px}
+  .ft .wrap{grid-template-columns:1fr;gap:26px}
+  .mbar{display:grid}
+  .gal .thumbs{display:none}
+  .gal .main{border-radius:0;margin-inline:calc(-1*clamp(16px,4cqi,40px))}
+  .pd{padding-top:0}
+  .tbl{display:none}.mcards{display:grid}
+  .buy{display:none}
+  .chipcats a{font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="pbar"><div class="in" id="pbar">
+  <b>Đại Lợi · Giao diện mới</b>
+  <span class="grow"></span>
+  <div class="seg" role="group" aria-label="Chọn trang">
+    <button data-p="home" aria-pressed="true">Trang chủ</button>
+    <button data-p="product" aria-pressed="false">Chi tiết sản phẩm</button>
+    <button data-p="profile" aria-pressed="false">Hồ sơ năng lực</button>
+  </div>
+  <div class="seg devseg" role="group" aria-label="Thiết bị xem">
+    <button data-d="desk" aria-pressed="true">Máy tính</button>
+    <button data-d="phone" aria-pressed="false">Điện thoại</button>
+  </div>
+</div></div>
+
+<div class="stage"><div class="frame" id="frame"><div class="site">
+
+<header class="hdr"><div class="wrap">
+  <a class="logo" href="#home"><img src="logo.webp" alt="Logo Đại Lợi"><span><b>ĐẠI LỢI</b><small>Khí nén · Làm lạnh</small></span></a>
+  <nav class="menu" aria-label="Menu chính"><a href="#home" data-nav="home">Trang chủ</a><a href="#home">Giới thiệu</a><a href="#product" data-nav="product">Sản phẩm</a><a href="#home">Dịch vụ</a><a href="#profile" data-nav="profile">Hồ sơ năng lực</a><a href="#home">Tin tức</a><a href="#home">Liên hệ</a></nav>
+  <span class="phone"><span><svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg></span>0903 618 942</span>
+  <button class="burger" id="burger" aria-label="Mở menu" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div>
+<nav class="drawer" id="drawer" aria-label="Menu di động"><a href="#home">Trang chủ</a><a href="#home">Giới thiệu</a><a href="#product">Sản phẩm</a><a href="#home">Dịch vụ</a><a href="#profile">Hồ sơ năng lực</a><a href="#home">Tin tức</a><a href="#home">Liên hệ</a><a class="btn btn-red" href="#quote">Nhận báo giá</a></nav>
+</header>
+
+<!-- ================= HOME ================= -->
+<main class="view" id="v-home">
+  <section class="hero">
+    <img src="hero.webp" alt="Phòng máy nén khí trục vít Fusheng">
+    <div class="wrap">
+      <span class="eyebrow">Đại lý cấp A Fusheng · Từ 28 năm nay</span>
+      <h1>Khí nén ổn định cho <em>nhà máy</em> không ngừng chạy</h1>
+      <p>Đại Lợi cung cấp, lắp đặt và bảo trì máy nén khí Fusheng, chiller Kuen Ling, tháp giải nhiệt Liang Chi và động cơ Teco cho nhà máy trên khắp Việt Nam.</p>
+      <div class="ctas"><a class="btn btn-red" href="#quote">Nhận tư vấn chọn máy</a><a class="btn btn-line" href="#product">Xem sản phẩm</a></div>
+    </div>
+  </section>
+  <div class="stats"><div class="wrap"><div class="box">
+    <div><b>28<sup>năm</sup></b><span>đồng hành cùng Fusheng</span></div>
+    <div><b>37<sup>+</sup></b><span>doanh nghiệp tiêu biểu tin dùng</span></div>
+    <div><b>5<sup>hãng</sup></b><span>thiết bị phân phối chính hãng</span></div>
+    <div><b>355<sup>kW</sup></b><span>công suất máy nén lớn nhất</span></div>
+  </div></div></div>
+
+  <section class="sec"><div class="wrap split">
+    <div class="pic"><img loading="lazy" src="install.webp" alt="Hệ thống máy nén khí và máy sấy lắp đặt tại nhà máy"><div class="float"><img src="p_logo1.webp" alt="Fusheng"><div><b>Đối tác Đồng hành Bền vững</b><span>Giải thưởng từ tập đoàn Fusheng</span></div></div></div>
+    <div>
+      <span class="eyebrow">Về Đại Lợi</span>
+      <h2 class="h2">Một đầu mối cho cả hệ thống khí nén</h2>
+      <p class="lead" style="margin-top:16px">Từ máy nén, máy sấy, bầu lọc, bình chứa đến đường ống, Đại Lợi tính tải, chọn cấu hình và lắp đặt trọn gói, rồi tiếp tục bảo trì suốt vòng đời thiết bị.</p>
+      <ul class="checks">
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>Đại lý cấp A máy nén khí Fusheng tại Việt Nam</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>Đại lý chiller Kuen Ling, tháp giải nhiệt Liang Chi, động cơ Teco</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>Thiết kế, thi công đường ống khí và bảo trì định kỳ</li>
+      </ul>
+      <a class="more" href="#profile">Xem hồ sơ năng lực <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div></section>
+
+  <section class="sec" style="background:var(--soft)"><div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Giải pháp</span><h2 class="h2">Thiết bị cho mọi công đoạn</h2></div><p class="lead">Bốn nhóm giải pháp chính, đầy đủ dải công suất từ xưởng nhỏ đến nhà máy lớn.</p></div>
+    <div class="sol">
+      <a class="sc light" href="#product"><img loading="lazy" src="sav.webp" alt=""><span class="go">↗</span><small>5 HP – 355 kW</small><h3>Máy nén khí trục vít</h3><p>Có dầu, không dầu, biến tần SAV tiết kiệm điện.</p></a>
+      <a class="sc light" href="#product"><img loading="lazy" src="piston2.webp" alt=""><span class="go">↗</span><small>1/2 – 175 HP</small><h3>Máy nén khí piston</h3><p>Bền bỉ, dễ bảo trì cho xưởng và gara.</p></a>
+      <a class="sc light" href="#product"><img loading="lazy" src="cat-dryer.webp" alt=""><span class="go">↗</span><small>0,6 – 46 m³/phút</small><h3>Xử lý khí nén</h3><p>Máy sấy, bầu lọc, bình chứa, máy tạo Nitơ.</p></a>
+      <a class="sc light" href="#product"><img loading="lazy" src="cat-chiller-w.webp" alt=""><span class="go">↗</span><small>5 – 350 HP</small><h3>Làm lạnh công nghiệp</h3><p>Chiller Kuen Ling, tháp giải nhiệt Liang Chi.</p></a>
+    </div>
+    <div class="chipcats" id="chipcats"></div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Sản phẩm nổi bật</span><h2 class="h2">Dòng máy Fusheng bán chạy</h2></div><div class="navbtns"><button data-scroll="-1" aria-label="Trước">←</button><button data-scroll="1" aria-label="Sau">→</button></div></div>
+    <div class="scroller" id="feat"></div>
+  </div></section>
+
+  <section class="sec dark"><div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow" style="color:#FF7A80">Dịch vụ kỹ thuật</span><h2 class="h2">Đội kỹ thuật theo máy suốt vòng đời</h2></div><p class="lead">Khảo sát, lắp đặt, bảo trì và sửa chữa bởi một đội ngũ, không qua trung gian.</p></div>
+    <div class="svc">
+      <a href="#home"><div class="ph"><img loading="lazy" src="tech3.webp" alt="Kỹ thuật viên khảo sát phòng máy"></div><div class="bd"><small>01</small><h3>Khảo sát &amp; tư vấn</h3><p>Đo lưu lượng, áp suất thực tế để chọn đúng công suất.</p></div></a>
+      <a href="#home"><div class="ph"><img loading="lazy" src="tech1.webp" alt="Dãy máy nén trục vít đã lắp đặt"></div><div class="bd"><small>02</small><h3>Lắp đặt trọn gói</h3><p>Thi công đường ống khí, đấu nối điện, chạy thử nghiệm thu.</p></div></a>
+      <a href="#home"><div class="ph"><img loading="lazy" src="tech2.webp" alt="Kiểm tra thông số máy nén"></div><div class="bd"><small>03</small><h3>Bảo trì định kỳ</h3><p>Thay lọc, dầu, kiểm tra thông số theo lịch giờ chạy.</p></div></a>
+      <a href="#home"><div class="ph"><img loading="lazy" src="tech5.webp" alt="Kỹ thuật viên sửa chữa máy"></div><div class="bd"><small>04</small><h3>Sửa chữa nhanh</h3><p>Xử lý sự cố các loại máy nén khí, giảm thời gian dừng máy.</p></div></a>
+    </div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Khách hàng</span><h2 class="h2">Doanh nghiệp đã tin chọn Đại Lợi</h2></div><a class="more" href="#profile">Xem dự án đã thực hiện →</a></div>
+  </div><div class="marq"><div class="track" id="marq"></div></div></section>
+
+  <section class="wrap" id="quote" style="scroll-margin-top:calc(var(--pbh) + 90px)"><div class="cta">
+    <div><h2>Chưa chắc nên chọn máy bao nhiêu HP?</h2><p>Gửi lưu lượng, áp suất và số ca chạy của xưởng. Kỹ sư Đại Lợi sẽ đề xuất cấu hình máy nén, máy sấy, lọc và bình chứa phù hợp.</p><div class="hot"><small>Hotline kỹ thuật</small><b>0903 618 942</b></div></div>
+    <form class="form js-form"><h3>Nhận báo giá trong 24 giờ</h3>
+      <div class="row2"><label class="field" for="q-n">Họ tên<input id="q-n" required placeholder="Nguyễn Văn A"></label><label class="field" for="q-p">Số điện thoại<input id="q-p" required inputmode="tel" placeholder="09xx xxx xxx"></label></div>
+      <label class="field" for="q-c">Công ty<input id="q-c" placeholder="Tên nhà máy, xưởng"></label>
+      <label class="field" for="q-s">Thiết bị cần tư vấn<select id="q-s"><option>Máy nén khí trục vít</option><option>Máy nén khí piston</option><option>Máy sấy, lọc, bình chứa</option><option>Chiller, tháp giải nhiệt</option><option>Bảo trì, sửa chữa</option></select></label>
+      <button class="btn btn-navy" type="submit">Gửi yêu cầu</button></form>
+  </div></section>
+</main>
+
+<!-- ================= PRODUCT ================= -->
+<main class="view" id="v-product" hidden>
+  <div class="crumbbar"><div class="wrap"><nav class="crumb" aria-label="Đường dẫn"><a href="#home">Trang chủ</a><i>/</i><a href="#product">Sản phẩm</a><i>/</i><a href="#product">Máy nén khí piston</a><i>/</i><span>Piston Dạng A</span></nav></div></div>
+  <div class="wrap pd">
+    <div class="gal">
+      <div class="wrapm"><span class="badge">Fusheng chính hãng</span><div class="main" id="galmain"></div><span class="count" id="galcount">1 / 5</span></div>
+      <div class="thumbs" id="galthumbs"></div>
+    </div>
+    <div class="info">
+      <span class="eyebrow">Máy nén khí piston · Fusheng</span>
+      <h1>Máy nén khí Piston Dạng A</h1>
+      <p class="sub">Dải công suất 1/2 HP – 20 HP, áp làm việc 8 kg/cm², đi kèm bình chứa. Bền bỉ cho xưởng cơ khí, gara và nhà máy vừa và nhỏ.</p>
+      <div class="pills"><span class="ok">● Sẵn hàng</span><span>Bảo hành chính hãng</span><span>Lắp đặt tận nơi</span></div>
+      <div class="lbl"><span>Chọn model</span><b class="mono" id="mname"></b></div>
+      <div class="chips" id="chips"></div>
+      <div class="readout" id="readout"></div>
+      <div class="buy"><a class="btn btn-red" href="#quote">Nhận báo giá model này</a><span class="btn btn-line" style="color:var(--navy)">Gọi 0903 618 942</span></div>
+      <div class="assure">
+        <div><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>Hàng chính hãng, đủ CO/CQ</div>
+        <div><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4"/></svg>Lắp đặt, chạy thử tại xưởng</div>
+        <div><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>Bảo trì định kỳ sau bán</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs" id="ptabs"><div class="wrap" style="display:flex;gap:6px"><a href="#product" data-t="b-feat" class="on">Đặc điểm</a><a href="#product" data-t="b-spec">Thông số</a><a href="#product" data-t="b-doc">Tài liệu</a><a href="#product" data-t="b-faq">Hỏi đáp</a><a href="#product" data-t="b-rel">Thiết bị đi kèm</a></div></div>
+
+  <div class="wrap">
+    <section class="block" id="b-feat"><h2>Thiết kế cho chạy tải liên tục</h2>
+      <div class="feat">
+        <div class="pic"><img loading="lazy" src="piston4.webp" alt="Cận cảnh đầu nén máy piston Fusheng"></div>
+        <div class="fl">
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg><span><h3>Ống giải nhiệt lớn</h3><p>Diện tích tản nhiệt lớn, làm mát hiệu quả giúp máy bền khi chạy liên tục.</p></span></div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16"/></svg><span><h3>Van hút thép Thụy Điển</h3><p>Lá van thép đặc biệt nhập khẩu, đã kiểm nghiệm chịu nhiệt, độ bền và tải.</p></span></div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M5 9h14M5 14h14"/></svg><span><h3>Nắp xylanh kín, bề mặt lớn</h3><p>Tăng diện tích giải nhiệt cho đầu nén, giảm nhiệt độ khí ra.</p></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="b-spec"><h2>Bảng thông số kỹ thuật</h2>
+      <div class="tbl"><table id="stable"></table></div>
+      <div class="mcards" id="mcards"></div>
+    </section>
+
+    <section class="block" id="b-doc"><div class="doc"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FF7A80" stroke-width="1.6"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M9 14h6M9 17h4"/></svg><div class="g"><b>Catalogue tổng hợp Đại Lợi</b><br><span>PDF · máy nén khí, máy sấy, lọc, bình chứa, chiller</span></div><a class="btn btn-red" href="https://dailoico.com.vn/dmdocuments/download.php?file=CATALOGUES_TONG_HOP_DAILOI.pdf" target="_blank" rel="noopener">Mở catalogue</a></div></section>
+
+    <section class="block" id="b-faq"><h2>Câu hỏi thường gặp</h2>
+      <details open><summary>Xưởng tôi nên chọn máy bao nhiêu HP?</summary><p>Cộng lưu lượng tiêu thụ của các thiết bị dùng khí, thêm 20–30% dự phòng rồi đối chiếu cột lưu lượng ở bảng trên. Kỹ sư Đại Lợi có thể khảo sát và tính giúp.</p></details>
+      <details><summary>Model 1 pha và 3 pha khác nhau thế nào?</summary><p>Model 0,5–1 HP dùng điện 1 pha 220 V. Từ 2 HP trở lên dùng điện 3 pha 380 V, phù hợp xưởng sản xuất.</p></details>
+      <details><summary>Có cần lắp thêm máy sấy và bầu lọc không?</summary><p>Nếu khí dùng cho sơn, thực phẩm hoặc thiết bị khí nén chính xác, nên lắp máy sấy và bầu lọc để loại hơi nước và dầu.</p></details>
+      <details><summary>Khi nào nên chuyển sang máy trục vít?</summary><p>Khi xưởng chạy liên tục nhiều giờ mỗi ngày và cần lưu lượng lớn, máy trục vít (đặc biệt dòng biến tần SAV) vận hành êm hơn và tiết kiệm điện hơn.</p></details>
+    </section>
+
+    <section class="block" id="b-rel"><div class="sec-head" style="margin-bottom:24px"><h2 style="margin:0">Thiết bị đi kèm &amp; nâng cấp</h2><div class="navbtns"><button data-scroll="-1" data-target="rel" aria-label="Trước">←</button><button data-scroll="1" data-target="rel" aria-label="Sau">→</button></div></div><div class="scroller" id="rel"></div></section>
+  </div>
+</main>
+
+<!-- ================= PROFILE ================= -->
+<main class="view" id="v-profile" hidden>
+  <section class="phero"><img src="room.webp" alt=""><div class="wrap">
+    <span class="eyebrow">Hồ sơ năng lực</span>
+    <h1>Máy móc Đại Lợi đã cung cấp cho khách hàng</h1>
+    <p>Hơn 28 năm phân phối và lắp đặt hệ thống khí nén, làm lạnh cho các nhà máy thực phẩm, nhựa, dệt may, cơ khí và dược phẩm.</p>
+    <div class="pstats"><div><b>28 năm</b><span>đồng hành cùng Fusheng</span></div><div><b>37+</b><span>doanh nghiệp tiêu biểu</span></div><div><b>6 ngành</b><span>sản xuất đang phục vụ</span></div><div><b>5 hãng</b><span>thiết bị chính hãng</span></div></div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Dự án tiêu biểu</span><h2 class="h2">Thiết bị đã lắp đặt</h2></div><span class="sample">Nội dung mẫu: thay bằng số liệu, ảnh công trình thật</span></div>
+    <div class="filters" id="filters" role="group" aria-label="Lọc theo ngành"></div>
+    <div class="projects" id="projects" style="margin-top:24px"></div>
+  </div></section>
+
+  <section class="sec" style="background:var(--soft)"><div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Khách hàng</span><h2 class="h2">Đối tác sản xuất tin dùng</h2></div><p class="lead">Logo khách hàng hiện có trên website Đại Lợi.</p></div>
+    <div class="wall" id="wall"></div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Cách chúng tôi triển khai</span><h2 class="h2">Từ khảo sát đến bàn giao</h2></div></div>
+    <div class="timeline">
+      <div><b>Bước 1</b><h3>Khảo sát hiện trạng</h3><p>Đo lưu lượng, áp suất, điện năng và điều kiện phòng máy.</p></div>
+      <div><b>Bước 2</b><h3>Đề xuất cấu hình</h3><p>Chọn máy nén, máy sấy, lọc, bình chứa và sơ đồ đường ống.</p></div>
+      <div><b>Bước 3</b><h3>Lắp đặt, chạy thử</h3><p>Thi công, đấu nối, chạy thử và nghiệm thu cùng khách hàng.</p></div>
+      <div><b>Bước 4</b><h3>Bảo trì định kỳ</h3><p>Lịch bảo dưỡng theo giờ chạy, hỗ trợ sửa chữa khi có sự cố.</p></div>
+    </div>
+  </div></section>
+
+  <section class="wrap"><div class="cta">
+    <div><h2>Cần hồ sơ năng lực bản đầy đủ?</h2><p>Để lại thông tin, Đại Lợi gửi hồ sơ năng lực và danh sách công trình tham khảo theo đúng ngành của bạn.</p><div class="hot"><small>Hotline</small><b>0903 618 942</b></div></div>
+    <form class="form js-form"><h3>Nhận hồ sơ năng lực</h3>
+      <div class="row2"><label class="field" for="r-n">Họ tên<input id="r-n" required></label><label class="field" for="r-p">Số điện thoại<input id="r-p" required inputmode="tel"></label></div>
+      <label class="field" for="r-e">Email<input id="r-e" type="email" placeholder="ten@congty.vn"></label>
+      <button class="btn btn-navy" type="submit">Gửi cho tôi</button></form>
+  </div></section>
+</main>
+
+<footer class="ft"><div class="wrap">
+  <div><a class="logo" href="#home"><img src="logo.webp" alt=""><span><b>ĐẠI LỢI</b></span></a><p style="margin-top:16px;max-width:36ch">Công ty TNHH TM DV Đại Lợi, nhà phân phối chuyên nghiệp hệ thống khí nén &amp; chiller. Trọn niềm tin, vẹn giải pháp.</p></div>
+  <div><h4>Sản phẩm</h4><ul><li><a href="#product">Máy nén khí trục vít</a></li><li><a href="#product">Máy nén khí piston</a></li><li><a href="#product">Máy sấy, lọc khí</a></li><li><a href="#product">Chiller, tháp giải nhiệt</a></li></ul></div>
+  <div><h4>Công ty</h4><ul><li><a href="#home">Giới thiệu</a></li><li><a href="#profile">Hồ sơ năng lực</a></li><li><a href="#home">Dịch vụ</a></li><li><a href="#home">Tin tức</a></li></ul></div>
+  <div><h4>Liên hệ</h4><ul><li>20 Đường số 2E, KDC Nam Hùng Vương, P. An Lạc, TP.HCM</li><li>0903 618 942 · 028 6674 4414</li><li>dailoi@dailoico.com.vn</li></ul></div>
+  <div class="legal"><span>© Công ty TNHH TM DV Đại Lợi</span><span>Đại lý cấp A Fusheng tại Việt Nam</span></div>
+</div></footer>
+
+<div class="mbar"><a href="#home"><svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>Gọi ngay</a><a class="zl" href="#home"><svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.8 2 11.5c0 2.6 1.4 5 3.7 6.5L5 21l3.5-1.8c1.1.3 2.3.5 3.5.5 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/></svg>Zalo</a><a class="q" href="#quote" id="mq">Nhận báo giá</a></div>
+
+</div></div></div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const arrow='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const CATS=[["Piston","piston1"],["Trục vít","sav"],["Không dầu","oilfree"],["Ly tâm","centri"],["Di động Airman","cat-mobile1"],["Máy sấy","cat-dryer"],["Bầu lọc","cat-filter"],["Bình chứa","cat-tank"],["Máy tạo Nitơ","cat-n2"],["Chiller","cat-chiller-w"],["Tháp giải nhiệt","cat-tower"],["Motor Teco","cat-motor"],["AHU / FCU","cat-ahu"]];
+$("#chipcats").innerHTML=CATS.map(c=>`<a href="#product"><img loading="lazy" src="${c[1]}.webp" alt="">${c[0]}</a>`).join("");
+const FEAT=[["sav","Trục vít biến tần SAV","Tiết kiệm điện, chạy êm cho tải thay đổi.","Biến tần"],["sa","Trục vít SA","Có dầu, độ bền cao, bảo trì đơn giản.","Bán chạy"],["swv","Trục vít SWV","Thế hệ mới, hiệu suất nén cao.","Mới"],["bwv","Trục vít BWV","Thiết kế gọn cho xưởng diện tích nhỏ.","Mới"],["oilfree","Không dầu GW","Khí sạch cho thực phẩm, dược, điện tử.","Không dầu"],["piston1","Piston Dạng A","1/2 – 20 HP, áp 8 kg/cm².","Bán chạy"],["centri","Máy nén ly tâm","Lưu lượng rất lớn cho nhà máy quy mô lớn.","Công suất lớn"],["parts","Phụ tùng chính hãng","Lọc gió, lọc dầu, tách dầu, dầu máy.","Bảo trì"]];
+const pc=f=>`<a class="pc" href="#product"><div class="ph"><span class="tag">${f[3]}</span><img loading="lazy" src="${f[0]}.webp" alt="${f[1]}"></div><h3>${f[1]}</h3><p>${f[2]}</p><div class="row"><span>Liên hệ báo giá</span><i>→</i></div></a>`;
+$("#feat").innerHTML=FEAT.map(pc).join("");
+$("#rel").innerHTML=[["cat-dryer","Máy sấy khí đông lạnh","0,83 – 44,4 m³/phút.","Xử lý khí"],["cat-filter","Bầu lọc khí","0,6 – 46 m³/phút.","Xử lý khí"],["cat-tank","Bình chứa khí","304 – 8.000 L.","Phụ trợ"],["parts","Phụ tùng bảo dưỡng","Lọc, dầu, tách dầu chính hãng.","Bảo trì"],["sav","Nâng cấp trục vít SAV","Khi xưởng chạy nhiều ca liên tục.","Nâng cấp"]].map(pc).join("");
+$$("[data-scroll]").forEach(b=>b.onclick=()=>{const s=b.dataset.target?$("#"+b.dataset.target):b.closest(".sec").querySelector(".scroller");s.scrollBy({left:s.clientWidth*.8*b.dataset.scroll,behavior:"smooth"})});
+
+const LOGOS=[["1","SPC"],["2","Cửu Long"],["3","FDC"],["4","ITH Long An"],["5","Scansia"],["logo10","Khách hàng"],["logo11","Phong Phú"],["logo12","IVR"],["logo13","BIO"],["logo15","Hữu Liên Á Châu"],["logo16","Luxury Decor"],["logo17","Cadivi"],["logo18","Vinabico"],["logo19","Nissei"],["logo2","Khách hàng"],["logo20","VIE Group"],["logo21","Ajinomoto"],["logo22","VMPack"],["logo23","SOVI"],["logo24","Ruthimex"],["logo25","Nhựa Đệ Nhất"],["logo26","BRC"],["logo29","Universal Plastic"],["logo3","Khách hàng"],["logo31","Thăng Long"],["logo32","Ming Hữu Liên"],["logo33","Bossday"],["logo34","Nam Hoa"],["logo36","Vimaflour"],["logo37","CL Fish"],["logo38","CNH"],["logo4","Dapha"],["logo6","Duy Tân"],["logo7","Nhựa Bình Minh"],["logo9","Trung Đông"],["vietnhat","Việt Nhật"]];
+const lg=l=>`<div class="lg"><img loading="lazy" src="kh-${l[0]}.webp" alt="${l[1]}"></div>`;
+$("#marq").innerHTML=(LOGOS.map(lg).join("")).repeat(2);
+$("#wall").innerHTML=LOGOS.map(lg).join("");
+
+const PJ=[
+ {c:"Ajinomoto",l:"logo21",ind:"Thực phẩm",y:"2023",img:"tech1",eq:["Máy nén khí trục vít không dầu","Máy sấy khí đông lạnh","Bầu lọc khí cấp thực phẩm"],k:[["150 HP","tổng công suất"],["24/7","vận hành"]]},
+ {c:"Nhựa Bình Minh",l:"logo7",ind:"Nhựa & bao bì",y:"2022",img:"install",eq:["Máy nén trục vít biến tần SAV","Bình chứa 2.000 L","Hệ đường ống khí"],k:[["2 × 75 HP","trục vít"],["≈ 25%","giảm điện năng"]]},
+ {c:"Nhựa Duy Tân",l:"logo6",ind:"Nhựa & bao bì",y:"2021",img:"tech3",eq:["Máy nén trục vít SA","Chiller giải nhiệt nước Kuen Ling","Tháp giải nhiệt Liang Chi"],k:[["120 HP","chiller"],["3 dây chuyền","ép nhựa"]]},
+ {c:"Phong Phú",l:"logo11",ind:"Dệt may",y:"2020",img:"tech5",eq:["Máy nén trục vít có dầu","Máy sấy khí","Bảo trì định kỳ"],k:[["100 HP","trục vít"],["Hợp đồng","bảo trì năm"]]},
+ {c:"Cadivi",l:"logo17",ind:"Cơ khí & cáp điện",y:"2019",img:"tech2",eq:["Máy nén khí piston cao áp","Bình chịu áp lực","Motor Teco"],k:[["15 HP","piston"],["30 kg/cm²","áp cao"]]},
+ {c:"Vimaflour",l:"logo36",ind:"Thực phẩm",y:"2018",img:"tech4",eq:["Máy nén trục vít","Bầu lọc khí 3 cấp","Máy tạo Nitơ"],k:[["50 HP","trục vít"],["99,9%","độ tinh khiết N₂"]]}
+];
+const INDS=["Tất cả",...new Set(PJ.map(p=>p.ind))];
+$("#filters").innerHTML=INDS.map((x,i)=>`<button aria-pressed="${i===0}">${x}</button>`).join("");
+const drawPJ=f=>$("#projects").innerHTML=PJ.filter(p=>f==="Tất cả"||p.ind===f).map(p=>`<article class="pj"><div class="ph"><img loading="lazy" src="${p.img}.webp" alt="Công trình ${p.c}"><span class="yr">${p.y}</span><span class="cl"><img src="kh-${p.l}.webp" alt="${p.c}"></span></div><div class="bd"><span class="ind">${p.ind}</span><h3>${p.c}</h3><ul>${p.eq.map(e=>`<li>${e}</li>`).join("")}</ul><div class="kpi">${p.k.map(k=>`<div><b>${k[0]}</b><span>${k[1]}</span></div>`).join("")}</div></div></article>`).join("");
+drawPJ("Tất cả");
+$$("#filters button").forEach(b=>b.onclick=()=>{$$("#filters button").forEach(x=>x.setAttribute("aria-pressed",x===b));drawPJ(b.textContent)});
+
+// gallery
+const GAL=[["piston1","Máy nén khí piston Fusheng HTA-65"],["piston2","Piston Fusheng 3 xylanh"],["piston3","Piston Fusheng, nhìn chính diện"],["piston4","Đầu nén và bình chứa"],["image-piston","Máy piston Fusheng"]];
+GAL[4]=["cat-piston","Máy piston bình ngang"];
+const gm=$("#galmain");gm.innerHTML=GAL.map(g=>`<img src="${g[0]}.webp" alt="${g[1]}">`).join("");
+$("#galthumbs").innerHTML=GAL.map((g,i)=>`<button aria-label="${g[1]}" aria-pressed="${i===0}"><img src="${g[0]}.webp" alt=""></button>`).join("");
+const setG=i=>{$$("#galthumbs button").forEach((b,j)=>b.setAttribute("aria-pressed",j===i));$("#galcount").textContent=(i+1)+" / "+GAL.length};
+$$("#galthumbs button").forEach((b,i)=>b.onclick=()=>{gm.scrollTo({left:gm.clientWidth*i,behavior:"smooth"});setG(i)});
+gm.addEventListener("scroll",()=>setG(Math.round(gm.scrollLeft/gm.clientWidth)),{passive:true});
+
+// models
+const M=[["VA-51","0,5","0,37","1 pha 220V","85","60","Ø300×910"],["VA-65","1","0,75","1 pha 220V","139","70","Ø300×1050"],["TA-65","2","1,5","3 pha 380V","302","70","Ø300×1050"],["VA-80","3","2,2","3 pha 380V","393","105","Ø350×1160"],["TA-80","5","3,7","3 pha 380V","791","155","Ø390×1410"],["VA-100","7,5","5,5","3 pha 380V","1.050","245","Ø485×1440"],["TA-100","10","7,5","3 pha 380V","1.465","304","Ø485×1760"],["TA-120","15","11","3 pha 380V","2.183","304","Ø485×1760"],["TA-125","20","15","3 pha 380V","3.022","500","Ø550×1784"]];
+$("#stable").innerHTML="<thead><tr><th>Model</th><th>Công suất</th><th>Nguồn điện</th><th>Áp suất</th><th>Lưu lượng</th><th>Bình chứa</th><th>Kích thước bình (mm)</th></tr></thead><tbody>"+M.map(m=>`<tr><td><b>${m[0]}</b></td><td class="n">${m[1]} HP / ${m[2]} kW</td><td>${m[3]}</td><td class="n">8 kg/cm²</td><td class="n">${m[4]} L/phút</td><td class="n">${m[5]} L</td><td class="n">${m[6]}</td></tr>`).join("")+"</tbody>";
+$("#mcards").innerHTML=M.map(m=>`<div class="mcard"><b>${m[0]}</b> · ${m[1]} HP<dl><dt>Công suất</dt><dd>${m[2]} kW</dd><dt>Nguồn điện</dt><dd>${m[3]}</dd><dt>Lưu lượng</dt><dd>${m[4]} L/ph</dd><dt>Bình chứa</dt><dd>${m[5]} L</dd><dt>Kích thước</dt><dd>${m[6]}</dd></dl></div>`).join("");
+$("#chips").innerHTML=M.map(m=>`<button type="button">${m[0]}</button>`).join("");
+function pick(i){const m=M[i];
+  $$("#chips button").forEach((b,j)=>b.setAttribute("aria-pressed",j===i));
+  $("#mname").textContent=m[0];$("#mq").textContent="Báo giá "+m[0];
+  $("#readout").innerHTML=`<div><span>Công suất</span><b>${m[1]}<small>HP · ${m[2]} kW</small></b></div><div><span>Lưu lượng khí</span><b>${m[4]}<small>L/phút</small></b></div><div><span>Áp suất làm việc</span><b>8<small>kg/cm²</small></b></div><div><span>Bình chứa</span><b>${m[5]}<small>L · ${m[3]}</small></b></div>`;
+  $$("#stable tbody tr").forEach((r,j)=>r.classList.toggle("on",j===i));$$("#mcards .mcard").forEach((r,j)=>r.classList.toggle("on",j===i));}
+$$("#chips button").forEach((b,i)=>b.onclick=()=>pick(i));pick(4);
+
+// product in-page tabs
+$$("#ptabs a").forEach(a=>a.onclick=e=>{e.preventDefault();$$("#ptabs a").forEach(x=>x.classList.toggle("on",x===a));$("#"+a.dataset.t).scrollIntoView({behavior:"smooth"})});
+
+// menu drawer
+const bg=$("#burger"),dr=$("#drawer");
+bg.onclick=()=>{const o=dr.classList.toggle("open");bg.setAttribute("aria-expanded",o)};
+$$("a",dr).forEach(a=>a.addEventListener("click",()=>{dr.classList.remove("open");bg.setAttribute("aria-expanded",false)}));
+
+// forms (demo)
+let tt;$$(".js-form").forEach(f=>f.addEventListener("submit",e=>{e.preventDefault();let t=$(".toast");if(!t){t=document.createElement("div");t.className="toast";document.body.append(t)}t.textContent="Đã ghi nhận yêu cầu (bản demo, chưa gửi đi)";t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2600);f.reset()}));
+
+// presenter: device + routing
+const fr=$("#frame");
+$$("[data-d]").forEach(b=>b.onclick=()=>{$$("[data-d]").forEach(x=>x.setAttribute("aria-pressed",x===b));fr.classList.toggle("phone",b.dataset.d==="phone")});
+const setPB=()=>document.documentElement.style.setProperty("--pbh",$(".pbar").offsetHeight+"px");
+addEventListener("resize",setPB);setPB();
+const PAGES=["home","product","profile"];
+function route(){
+  const h=location.hash.slice(1);
+  if(h==="quote"){if(!$("#v-home").hidden||!$("#v-profile").hidden)return;location.hash="home";setTimeout(()=>$("#quote").scrollIntoView(),50);return}
+  const p=PAGES.includes(h)?h:"home";
+  PAGES.forEach(x=>$("#v-"+x).hidden=x!==p);
+  $$("[data-p]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.p===p));
+  $$(".menu a").forEach(a=>a.classList.toggle("on",a.dataset.nav===p));
+  scrollTo(0,0);
+}
+$$("[data-p]").forEach(b=>b.onclick=()=>location.hash=b.dataset.p);
+addEventListener("hashchange",route);route();
+</script>
+</body>
+</html>
