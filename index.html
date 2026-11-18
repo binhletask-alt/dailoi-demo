@@ -6,15 +6,16 @@
 <title>Đại Lợi Redesign</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap">
 <style>
 /* Corporate-industrial: full-bleed photography, big stacked headlines, navy + signal red, white space. Responsive via container queries so the Mobile preview toggle shows the real phone layout. */
 :root{
   color-scheme:light;
   --navy:#0A1F33; --navy2:#12304D; --red:#E3262E; --red-d:#C11C23; --red-soft:#FDEEEE;
   --ink:#0F1B2A; --muted:#5D6B7A; --line:#E3E8EE; --soft:#F4F6F9; --white:#fff; --ok:#11946B;
-  --f:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --mono:"Inter",system-ui,sans-serif;
+  --head:"Montserrat","Inter",system-ui,sans-serif;
   --pbh:58px;
 }
 *{box-sizing:border-box}
@@ -24,7 +25,8 @@ a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:3px solid #2E7CF6;outline-offset:2px}
-h1,h2,h3,h4{margin:0;text-wrap:balance;line-height:1.15}
+h1,h2,h3,h4{margin:0;text-wrap:balance;line-height:1.15;font-family:var(--head)}
+.logo b,.stats b,.pstats b,.cta .hot b,.btn{font-family:var(--head)}
 p{margin:0}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 
@@ -53,7 +55,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .ico{width:18px;height:18px;flex:none}
 .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
 .eyebrow::before{content:"";width:26px;height:2px;background:currentColor}
-.h2{font-size:clamp(28px,4.2cqi,48px);font-weight:800;letter-spacing:-.025em;color:var(--navy);margin-top:12px}
+.h2{font-size:clamp(28px,4.2cqi,48px);font-weight:800;letter-spacing:-.015em;color:var(--navy);margin-top:0}
 .lead{color:var(--muted);font-size:clamp(15px,1.4cqi,17px);max-width:60ch}
 .sec{padding-block:clamp(56px,8cqi,110px)}
 .sec-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:clamp(28px,4cqi,48px)}
@@ -83,7 +85,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(7,22,38,.92) 0%,rgba(7,22,38,.72) 42%,rgba(7,22,38,.15) 100%)}
 .hero .wrap{min-height:clamp(540px,52cqi,700px);display:flex;flex-direction:column;justify-content:center;padding-block:80px 140px}
 .hero .eyebrow{color:#FF7A80}
-.hero h1{font-size:clamp(38px,6.4cqi,82px);font-weight:800;letter-spacing:-.035em;line-height:1.02;margin:20px 0 22px;max-width:13ch}
+.hero h1{font-size:clamp(38px,6.4cqi,82px);font-weight:800;letter-spacing:-.02em;line-height:1.02;margin:0 0 22px;max-width:15ch}
 .hero h1 em{font-style:normal;color:#FF5A61}
 .hero p{color:#C8D5E2;font-size:clamp(15px,1.5cqi,18px);max-width:52ch}
 .hero .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
@@ -92,7 +94,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .stats .box{background:#fff;border-radius:20px;box-shadow:0 24px 60px rgba(10,31,51,.14);display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
 .stats .box div{padding:28px 30px;border-left:1px solid var(--line)}
 .stats .box div:first-child{border:0}
-.stats b{display:block;font-size:clamp(30px,3.6cqi,44px);font-weight:800;letter-spacing:-.03em;color:var(--navy);line-height:1.05}
+.stats b{display:block;font-size:clamp(30px,3.6cqi,44px);font-weight:800;letter-spacing:-.015em;color:var(--navy);line-height:1.05}
 .stats b sup{font-size:.5em;color:var(--red);margin-left:2px}
 .stats span{color:var(--muted);font-size:14px}
 
@@ -167,7 +169,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 /* CTA */
 .cta{background:linear-gradient(120deg,var(--red) 0%,#B5141B 100%);color:#fff;border-radius:26px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4cqi,56px);padding:clamp(28px,5cqi,60px);position:relative;overflow:hidden}
 .cta::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;border:60px solid rgba(255,255,255,.07)}
-.cta h2{font-size:clamp(26px,3.6cqi,42px);font-weight:800;letter-spacing:-.025em}
+.cta h2{font-size:clamp(26px,3.6cqi,42px);font-weight:800;letter-spacing:-.015em}
 .cta p{color:#FFE1E2;margin-top:12px}
 .cta .hot{margin-top:26px;display:flex;flex-direction:column;gap:2px}
 .cta .hot small{color:#FFD0D2}
@@ -211,7 +213,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .gal .thumbs button{border:2px solid transparent;border-radius:14px;background:var(--soft);aspect-ratio:1;padding:6px;cursor:pointer}
 .gal .thumbs button[aria-pressed="true"]{border-color:var(--red);background:#fff}
 .gal .thumbs img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
-.info h1{font-size:clamp(30px,3.8cqi,46px);font-weight:800;letter-spacing:-.03em;color:var(--navy);margin:12px 0 10px}
+.info h1{font-size:clamp(30px,3.8cqi,46px);font-weight:800;letter-spacing:-.015em;color:var(--navy);margin:12px 0 10px}
 .info .sub{color:var(--muted)}
 .pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
 .pills span{font-size:12.5px;font-weight:600;background:var(--soft);border-radius:999px;padding:6px 12px}
@@ -273,7 +275,7 @@ details p{color:var(--muted);margin-top:10px;max-width:70ch}
 .phero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
 .phero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(7,22,38,.75),rgba(7,22,38,.92))}
 .phero .wrap{padding-block:clamp(64px,9cqi,120px) clamp(48px,6cqi,80px)}
-.phero h1{font-size:clamp(34px,5.6cqi,68px);font-weight:800;letter-spacing:-.035em;max-width:16ch;margin:16px 0 18px}
+.phero h1{font-size:clamp(34px,5.6cqi,68px);font-weight:800;letter-spacing:-.02em;max-width:16ch;margin:0 0 18px}
 .phero p{color:#C8D5E2;max-width:58ch}
 .phero .eyebrow{color:#FF7A80}
 .pstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:rgba(255,255,255,.14);border-radius:18px;overflow:hidden;margin-top:44px}
@@ -401,7 +403,6 @@ details p{color:var(--muted);margin-top:10px;max-width:70ch}
   <section class="hero">
     <img src="hero.webp" alt="Phòng máy nén khí trục vít Fusheng">
     <div class="wrap">
-      <span class="eyebrow">Đại lý cấp A Fusheng · Từ 28 năm nay</span>
       <h1>Khí nén ổn định cho <em>nhà máy</em> không ngừng chạy</h1>
       <p>Đại Lợi cung cấp, lắp đặt và bảo trì máy nén khí Fusheng, chiller Kuen Ling, tháp giải nhiệt Liang Chi và động cơ Teco cho nhà máy trên khắp Việt Nam.</p>
       <div class="ctas"><a class="btn btn-red" href="#quote">Nhận tư vấn chọn máy</a><a class="btn btn-line" href="#product">Xem sản phẩm</a></div>
@@ -417,7 +418,6 @@ details p{color:var(--muted);margin-top:10px;max-width:70ch}
   <section class="sec"><div class="wrap split">
     <div class="pic"><img loading="lazy" src="install.webp" alt="Hệ thống máy nén khí và máy sấy lắp đặt tại nhà máy"><div class="float"><img src="p_logo1.webp" alt="Fusheng"><div><b>Đối tác Đồng hành Bền vững</b><span>Giải thưởng từ tập đoàn Fusheng</span></div></div></div>
     <div>
-      <span class="eyebrow">Về Đại Lợi</span>
       <h2 class="h2">Một đầu mối cho cả hệ thống khí nén</h2>
       <p class="lead" style="margin-top:16px">Từ máy nén, máy sấy, bầu lọc, bình chứa đến đường ống, Đại Lợi tính tải, chọn cấu hình và lắp đặt trọn gói, rồi tiếp tục bảo trì suốt vòng đời thiết bị.</p>
       <ul class="checks">
@@ -430,7 +430,7 @@ details p{color:var(--muted);margin-top:10px;max-width:70ch}
   </div></section>
 
   <section class="sec" style="background:var(--soft)"><div class="wrap">
-    <div class="sec-head"><div><span class="eyebrow">Giải pháp</span><h2 class="h2">Thiết bị cho mọi công đoạn</h2></div><p class="lead">Bốn nhóm giải pháp chính, đầy đủ dải công suất từ xưởng nhỏ đến nhà máy lớn.</p></div>
+    <div class="sec-head"><div><h2 class="h2">Thiết bị cho mọi công đoạn</h2></div><p class="lead">Bốn nhóm giải pháp chính, đầy đủ dải công suất từ xưởng nhỏ đến nhà máy lớn.</p></div>
     <div class="sol">
       <a class="sc light" href="#product"><img loading="lazy" src="sav.webp" alt=""><span class="go">↗</span><small>5 HP – 355 kW</small><h3>Máy nén khí trục vít</h3><p>Có dầu, không dầu, biến tần SAV tiết kiệm điện.</p></a>
       <a class="sc light" href="#product"><img loading="lazy" src="piston2.webp" alt=""><span class="go">↗</span><small>1/2 – 175 HP</small><h3>Máy nén khí piston</h3><p>Bền bỉ, dễ bảo trì cho xưởng và gara.</p></a>
@@ -441,12 +441,12 @@ details p{color:var(--muted);margin-top:10px;max-width:70ch}
   </div></section>
 
   <section class="sec"><div class="wrap">
-    <div class="sec-head"><div><span class="eyebrow">Sản phẩm nổi bật</span><h2 class="h2">Dòng máy Fusheng bán chạy</h2></div><div class="navbtns"><button data-scroll="-1" aria-label="Trước">←</button><button data-scroll="1" aria-label="Sau">→</button></div></div>
+    <div class="sec-head"><div><h2 class="h2">Dòng máy Fusheng bán chạy</h2></div><div class="navbtns"><button data-scroll="-1" aria-label="Trước">←</button><button data-scroll="1" aria-label="Sau">→</button></div></div>
     <div class="scroller" id="feat"></div>
   </div></section>
 
   <section class="sec dark"><div class="wrap">
-    <div class="sec-head"><div><span class="eyebrow" style="color:#FF7A80">Dịch vụ kỹ thuật</span><h2 class="h2">Đội kỹ thuật theo máy suốt vòng đời</h2></div><p class="lead">Khảo sát, lắp đặt, bảo trì và sửa chữa bởi một đội ngũ, không qua trung gian.</p></div>
+    <div class="sec-head"><div><h2 class="h2">Đội kỹ thuật theo máy suốt vòng đời</h2></div><p class="lead">Khảo sát, lắp đặt, bảo trì và sửa chữa bởi một đội ngũ, không qua trung gian.</p></div>
     <div class="svc">
       <a href="#home"><div class="ph"><img loading="lazy" src="tech3.webp" alt="Kỹ thuật viên khảo sát phòng máy"></div><div class="bd"><small>01</small><h3>Khảo sát &amp; tư vấn</h3><p>Đo lưu lượng, áp suất thực tế để chọn đúng công suất.</p></div></a>
       <a href="#home"><div class="ph"><img loading="lazy" src="tech1.webp" alt="Dãy máy nén trục vít đã lắp đặt"></div><div class="bd"><small>02</small><h3>Lắp đặt trọn gói</h3><p>Thi công đường ống khí, đấu nối điện, chạy thử nghiệm thu.</p></div></a>
@@ -456,7 +456,7 @@ details p{color:var(--muted);margin-top:10px;max-width:70ch}
   </div></section>
 
   <section class="sec"><div class="wrap">
-    <div class="sec-head"><div><span class="eyebrow">Khách hàng</span><h2 class="h2">Doanh nghiệp đã tin chọn Đại Lợi</h2></div><a class="more" href="#profile">Xem dự án đã thực hiện →</a></div>
+    <div class="sec-head"><div><h2 class="h2">Doanh nghiệp đã tin chọn Đại Lợi</h2></div><a class="more" href="#profile">Xem dự án đã thực hiện →</a></div>
   </div><div class="marq"><div class="track" id="marq"></div></div></section>
 
   <section class="wrap" id="quote" style="scroll-margin-top:calc(var(--pbh) + 90px)"><div class="cta">
@@ -478,7 +478,6 @@ details p{color:var(--muted);margin-top:10px;max-width:70ch}
       <div class="thumbs" id="galthumbs"></div>
     </div>
     <div class="info">
-      <span class="eyebrow">Máy nén khí piston · Fusheng</span>
       <h1>Máy nén khí Piston Dạng A</h1>
       <p class="sub">Dải công suất 1/2 HP – 20 HP, áp làm việc 8 kg/cm², đi kèm bình chứa. Bền bỉ cho xưởng cơ khí, gara và nhà máy vừa và nhỏ.</p>
       <div class="pills"><span class="ok">● Sẵn hàng</span><span>Bảo hành chính hãng</span><span>Lắp đặt tận nơi</span></div>
@@ -529,25 +528,24 @@ details p{color:var(--muted);margin-top:10px;max-width:70ch}
 <!-- ================= PROFILE ================= -->
 <main class="view" id="v-profile" hidden>
   <section class="phero"><img src="room.webp" alt=""><div class="wrap">
-    <span class="eyebrow">Hồ sơ năng lực</span>
     <h1>Máy móc Đại Lợi đã cung cấp cho khách hàng</h1>
     <p>Hơn 28 năm phân phối và lắp đặt hệ thống khí nén, làm lạnh cho các nhà máy thực phẩm, nhựa, dệt may, cơ khí và dược phẩm.</p>
     <div class="pstats"><div><b>28 năm</b><span>đồng hành cùng Fusheng</span></div><div><b>37+</b><span>doanh nghiệp tiêu biểu</span></div><div><b>6 ngành</b><span>sản xuất đang phục vụ</span></div><div><b>5 hãng</b><span>thiết bị chính hãng</span></div></div>
   </div></section>
 
   <section class="sec"><div class="wrap">
-    <div class="sec-head"><div><span class="eyebrow">Dự án tiêu biểu</span><h2 class="h2">Thiết bị đã lắp đặt</h2></div><span class="sample">Nội dung mẫu: thay bằng số liệu, ảnh công trình thật</span></div>
+    <div class="sec-head"><div><h2 class="h2">Thiết bị đã lắp đặt</h2></div><span class="sample">Nội dung mẫu: thay bằng số liệu, ảnh công trình thật</span></div>
     <div class="filters" id="filters" role="group" aria-label="Lọc theo ngành"></div>
     <div class="projects" id="projects" style="margin-top:24px"></div>
   </div></section>
 
   <section class="sec" style="background:var(--soft)"><div class="wrap">
-    <div class="sec-head"><div><span class="eyebrow">Khách hàng</span><h2 class="h2">Đối tác sản xuất tin dùng</h2></div><p class="lead">Logo khách hàng hiện có trên website Đại Lợi.</p></div>
+    <div class="sec-head"><div><h2 class="h2">Đối tác sản xuất tin dùng</h2></div><p class="lead">Logo khách hàng hiện có trên website Đại Lợi.</p></div>
     <div class="wall" id="wall"></div>
   </div></section>
 
   <section class="sec"><div class="wrap">
-    <div class="sec-head"><div><span class="eyebrow">Cách chúng tôi triển khai</span><h2 class="h2">Từ khảo sát đến bàn giao</h2></div></div>
+    <div class="sec-head"><div><h2 class="h2">Từ khảo sát đến bàn giao</h2></div></div>
     <div class="timeline">
       <div><b>Bước 1</b><h3>Khảo sát hiện trạng</h3><p>Đo lưu lượng, áp suất, điện năng và điều kiện phòng máy.</p></div>
       <div><b>Bước 2</b><h3>Đề xuất cấu hình</h3><p>Chọn máy nén, máy sấy, lọc, bình chứa và sơ đồ đường ống.</p></div>
